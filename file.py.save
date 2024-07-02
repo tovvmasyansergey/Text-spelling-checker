@@ -1,0 +1,34 @@
+import re
+import argparse
+import spellchecker
+def get_arguments():
+    try:
+        parser = argparse.ArgumentParser()
+        parser.add_argument("-f","--filename",required = True,help = "input filename")
+        parser.add_argument("-o","--output",required = True,help = "input output file name")
+        args = parser.parse_args()
+        file_name = args.filename
+        output_file = args.output
+        return file_name,output_file
+    except  argparse.ArgumentError as e:
+        print(f"please input file with text and file for output {e}")
+        return None,None
+def open_file(filename):
+    ml = []
+    with open(filename) as f:
+        mstr = f.readlines()
+    for i in mstr:
+        words = re.findall(r'\b\w+\b',i.strip())
+        ml.append(words)
+    return ml
+def find(text):
+    spell = spellchecker.SpellChecker()
+    for line in text:
+        for words in line:
+            miss_word = spell.unknown(words)
+def main:
+    filename,output_name = get_arguments()
+    list_words = open_file(filename)
+    
+if "__name__" == "__main__":
+    main()

@@ -1,0 +1,47 @@
+import argparse
+import re
+import enchant
+def get_arguments():
+    """
+    Function: get_arguments
+    Brief: The functiom is return name of city and parametrs of weather
+    Params: city:name of city,parametrs:parametr of weather
+    Return: name of city and parametrs
+    """
+    try:
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-f', '--file', required=True, help="This is a input file name with text")
+        parser.add_argument('-o', '--output',required = True, help="Please input file for finish text")
+        args = parser.parse_args()
+        filename = args.file
+        output_file = args.output
+        return filename,output_file
+    except  argparse.ArgumentError as e:
+        print(f"please input name city and parametr of weather {e}")
+        return None,None
+def open_file(filename):
+    with open(filename) as ffile:
+        list_lines = ffile.readlines()
+    return list_lines
+def check_words(content):
+    list_words = []
+    for line in content:
+        words = re.findall(r'\b\w+\b',line.strip())
+        list_words.append(words)
+    dicnary = enchant.Dict("en_US")
+    for line in list_words:
+        for word in range(len(line)):
+            if not dicnary.check(line[word]):
+                print("The wrong word: ",line[word])
+                print(line[word]," ".join(dicnary.suggest(line[word])[:5]))
+                new_word = input()
+                if new_word != "":
+                    line[word] = new_word
+    return list_words
+def write_in_file(filename,content):
+    with open(filename,"w") as ffile:
+        for line in content:
+        ffile.write
+filename,output_file = get_arguments()
+content = open_file(filename)
+print(check_words(content))
